@@ -11,6 +11,8 @@ from tests.apidocs.util import APIDocsTestCase
 
 
 class ProjectGroupHashesDocs(APIDocsTestCase):
+    # TODO An undocumented delete endpoint also exists.
+
     def setUp(self):
         min_ago = iso_format(before_now(minutes=1))
         two_min_ago = iso_format(before_now(minutes=2))
@@ -45,11 +47,5 @@ class ProjectGroupHashesDocs(APIDocsTestCase):
     def test_get(self):
         response = self.client.get(self.url)
         request = RequestFactory().get(self.url)
-
-        self.validate_schema(request, response)
-
-    def test_delete(self):
-        response = self.client.delete(self.url)
-        request = RequestFactory().delete(self.url)
 
         self.validate_schema(request, response)

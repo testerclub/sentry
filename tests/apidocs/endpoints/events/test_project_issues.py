@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 
-from django.core.urlresolvers import reverse
 from django.test.client import RequestFactory
 
 from sentry.testutils.helpers.datetime import before_now, iso_format
@@ -10,8 +9,6 @@ from tests.apidocs.util import APIDocsTestCase
 
 
 class ProjectIssuesDocs(APIDocsTestCase):
-    endpoint = "sentry-api-0-project-group-index"
-
     def setUp(self):
         project = self.create_project()
 
@@ -20,10 +17,7 @@ class ProjectIssuesDocs(APIDocsTestCase):
                 data={"timestamp": iso_format(before_now(minutes=1))}, project_id=project.id
             )
 
-        self.url = reverse(
-            self.endpoint,
-            kwargs={"organization_slug": project.organization.slug, "project_slug": project.slug},
-        )
+        self.url = u"/api/0/projects/{}/{}/issues/".format(project.organization.slug, project.slug)
 
         self.login_as(user=self.user)
 
@@ -34,7 +28,7 @@ class ProjectIssuesDocs(APIDocsTestCase):
         self.validate_schema(request, response)
 
     def test_put(self):
-        data = {}
+        data = {"isPublic": False, "status": "unresolved", "statusDetails": {}}
         response = self.client.put(self.url, data)
         request = RequestFactory().put(self.url, data)
 

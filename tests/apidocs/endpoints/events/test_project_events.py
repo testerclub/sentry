@@ -15,10 +15,12 @@ class ProjectEventsDocs(APIDocsTestCase):
     def setUp(self):
         project = self.create_project()
 
-        for _ in range(2):
-            self.store_event(
-                data={"timestamp": iso_format(before_now(minutes=1))}, project_id=project.id
-            )
+        self.store_event(
+            data={"timestamp": iso_format(before_now(minutes=1))}, project_id=project.id
+        )
+        self.store_event(
+            data={"timestamp": iso_format(before_now(minutes=1))}, project_id=project.id
+        )
 
         self.url = reverse(
             self.endpoint,
